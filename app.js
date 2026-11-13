@@ -38,7 +38,6 @@
     viewConditions: document.getElementById('view-conditions'),
     viewDrugs: document.getElementById('view-drugs'),
     viewOrderpad: document.getElementById('view-orderpad'),
-    colorThemeSelect: document.getElementById('color-theme-select'),
     themeToggle: document.getElementById('theme-toggle'),
     installPwaBtn: document.getElementById('install-pwa-btn'),
     orderpadBadge: document.getElementById('orderpad-badge-count'),
@@ -91,13 +90,7 @@
   // --- Preferences & Theme Loading ---
   function loadLocalPreferences() {
     try {
-      // Color Theme
-      const savedColorTheme = localStorage.getItem('am_rx_color_theme') || 'teal';
-      state.colorTheme = savedColorTheme;
-      document.documentElement.setAttribute('data-theme', savedColorTheme);
-      if (dom.colorThemeSelect) dom.colorThemeSelect.value = savedColorTheme;
-
-      // Dark Mode
+      // Night/Day Mode
       const savedTheme = localStorage.getItem('am_rx_dark_mode');
       if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         state.isDarkMode = true;
@@ -142,18 +135,7 @@
     if (dom.mobTabDrugs) dom.mobTabDrugs.addEventListener('click', () => switchTab('drugs'));
     if (dom.mobTabOrderpad) dom.mobTabOrderpad.addEventListener('click', () => switchTab('orderpad'));
 
-    // Theme selector
-    if (dom.colorThemeSelect) {
-      dom.colorThemeSelect.addEventListener('change', (e) => {
-        const theme = e.target.value;
-        state.colorTheme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('am_rx_color_theme', theme);
-        showToast(`Theme updated: ${e.target.options[e.target.selectedIndex].text}`);
-      });
-    }
-
-    // Dark/Light toggle
+    // Night/Day Mode Toggle
     dom.themeToggle.addEventListener('click', () => {
       state.isDarkMode = !state.isDarkMode;
       document.documentElement.classList.toggle('dark', state.isDarkMode);
@@ -185,7 +167,7 @@
       dom.appSidebar.classList.remove('collapsed');
       dom.appSidebar.classList.add('mobile-open');
       dom.sidebarBackdrop.classList.add('active');
-      if (dom.sidebarToggleText) dom.sidebarToggleText.textContent = '✕ Close Navigator';
+      if (dom.sidebarToggleText) dom.sidebarToggleText.textContent = '✕ Close';
     };
 
     const closeSidebar = () => {
@@ -193,7 +175,7 @@
       dom.appSidebar.classList.add('collapsed');
       dom.appSidebar.classList.remove('mobile-open');
       dom.sidebarBackdrop.classList.remove('active');
-      if (dom.sidebarToggleText) dom.sidebarToggleText.textContent = '📂 Browse Topics';
+      if (dom.sidebarToggleText) dom.sidebarToggleText.textContent = '📂 Topics';
     };
 
     dom.toggleSidebarBtn.addEventListener('click', () => {
@@ -482,7 +464,7 @@
     dom.appSidebar.classList.add('collapsed');
     dom.appSidebar.classList.remove('mobile-open');
     dom.sidebarBackdrop.classList.remove('active');
-    if (dom.sidebarToggleText) dom.sidebarToggleText.textContent = '📂 Browse Topics';
+    if (dom.sidebarToggleText) dom.sidebarToggleText.textContent = '📂 Topics';
   }
 
   // --- Filter Protocols ---

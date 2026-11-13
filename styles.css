@@ -361,27 +361,6 @@ input, select {
   flex-shrink: 0;
 }
 
-.theme-picker-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  background-color: var(--bg-muted);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-subtle);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.theme-select {
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  outline: none;
-}
-
 .icon-btn {
   padding: 0.45rem;
   border-radius: 0.5rem;
