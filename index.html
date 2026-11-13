@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="teal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AntimicrobialRx — Doctor's Clinical Decision Support</title>
+  <meta name="description" content="Structured Clinical Antibiotic Guidelines Decision Support App. 100% Offline & Installable. Browse by Clinical System, Subsystem, and Disease with one-click prescription order copying.">
+  <meta name="theme-color" content="#0d9488">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top App Navigation Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Brand & Sidebar Toggle -->
+      <div class="brand-wrapper">
+        <button type="button" id="toggle-sidebar-btn" class="toggle-sidebar-btn" title="Toggle Topics Navigator">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+          <span id="sidebar-toggle-text">📂 Browse Topics</span>
+        </button>
+
+        <div class="brand-icon">🩺</div>
+        <div>
+          <div style="display: flex; align-items: center;">
+            <div class="brand-title">Antimicrobial<span>Rx</span></div>
+            <span class="brand-badge">Doctor's Guide</span>
+          </div>
+          <div class="brand-subtitle">BSMMU Antibiotic Guidelines • 100% Offline</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button type="button" id="tab-conditions" class="nav-tab active">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          <span>Diseases & Systems</span>
+        </button>
+
+        <button type="button" id="tab-drugs" class="nav-tab">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+          <span>Medicine Index</span>
+        </button>
+
+        <button type="button" id="tab-orderpad" class="nav-tab">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Rx Order Pad (<span id="orderpad-badge-count">0</span>)</span>
+        </button>
+      </nav>
+
+      <!-- Actions: Theme Picker, Dark Mode & Install -->
+      <div class="header-actions">
+        <!-- Multiple Theme Palette Picker -->
+        <div class="theme-picker-wrapper" title="Select Color Theme">
+          <span>🎨</span>
+          <select id="color-theme-select" class="theme-select">
+            <option value="teal">Clinical Teal</option>
+            <option value="navy">Midnight Navy</option>
+            <option value="cobalt">Cobalt Blue</option>
+            <option value="emerald">Surgical Emerald</option>
+            <option value="amethyst">Amethyst Purple</option>
+          </select>
+        </div>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button type="button" id="theme-toggle" class="icon-btn" title="Toggle Dark/Light Mode">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <!-- PWA Install Button -->
+        <button type="button" id="install-pwa-btn" class="install-pwa-btn" title="Install App for Offline Use">
+          <span>📲 Install App</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Master Layout with Backdrop -->
+  <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+  <div class="app-layout">
+
+    <!-- Left Sidebar: Hierarchical Navigator -->
+    <aside id="app-sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-header-top">
+          <span class="sidebar-title">Clinical Navigator</span>
+          <button type="button" id="sidebar-close-btn" class="sidebar-close-btn" title="Close Navigator">✕ Close</button>
+        </div>
+        <div class="population-switch" id="population-switch">
+          <button type="button" class="pop-btn active" data-pop="ALL">All (187)</button>
+          <button type="button" class="pop-btn" data-pop="ADULT">Adult (138)</button>
+          <button type="button" class="pop-btn" data-pop="PAED">👶 Paed (49)</button>
+        </div>
+      </div>
+
+      <div style="padding: 0.65rem 0.75rem 0.25rem 0.75rem;">
+        <button type="button" id="reset-filters-btn" style="width: 100%; padding: 0.45rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 700; background-color: var(--bg-muted); border: 1px solid var(--border-subtle); color: var(--text-main); text-align: left; display: flex; align-items: center; justify-content: space-between;">
+          <span>🌐 Show All Topics</span>
+          <span class="system-badge" id="total-protocols-badge">187</span>
+        </button>
+      </div>
+
+      <!-- Tree Container with Direct Topic Links -->
+      <div class="sidebar-tree" id="sidebar-tree-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Universal Fast Search Banner -->
+      <section class="search-banner">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            id="global-search-input"
+            class="search-input"
+            placeholder="Search disease (e.g., Meningitis, Sepsis), medicine (e.g., Meropenem), or pathogen..."
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="button" id="clear-search-btn" class="search-clear-btn" title="Clear search">✕</button>
+        </div>
+
+        <!-- Recent Searches Chips -->
+        <div id="recent-searches-box" class="recent-searches" style="display: none;">
+          <span class="recent-label">Recent:</span>
+          <div id="recent-chips-list" style="display: flex; gap: 0.35rem; align-items: center;"></div>
+          <button type="button" id="clear-recent-all" class="clear-recent-all">Clear history</button>
+        </div>
+      </section>
+
+      <!-- Active Context Navigation & Breadcrumb -->
+      <div class="active-context-bar">
+        <div class="context-left">
+          <button type="button" id="open-topics-btn" class="toggle-sidebar-btn" style="padding: 0.25rem 0.55rem; font-size: 0.72rem;">
+            📂 Jump to Another Topic
+          </button>
+          <div class="context-breadcrumb" id="context-breadcrumb">
+            <span>All Clinical Guidelines</span>
+          </div>
+        </div>
+        <div class="context-count" id="context-count">
+          Showing 187 protocols
+        </div>
+      </div>
+
+      <!-- VIEW 1: Clinical Conditions Cards Grid -->
+      <div id="view-conditions">
+        <div class="cards-grid" id="cards-container">
+          <!-- Rendered dynamically with visually distinct system styling -->
+        </div>
+      </div>
+
+      <!-- VIEW 2: Medicine Reverse Index View (Hidden by default) -->
+      <div id="view-drugs" style="display: none;">
+        <div style="background-color: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 1rem; padding: 1.5rem; box-shadow: var(--shadow-sm);">
+          <div style="margin-bottom: 1.25rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+              💊 Antimicrobial Medicine Index
+            </h2>
+            <p style="font-size: 0.8125rem; color: var(--text-muted);">
+              Reverse lookup by antibiotic generic: inspect every indication, dose, frequency, and alternative usage.
+            </p>
+          </div>
+
+          <!-- Medicine Filter Chips -->
+          <div id="drug-pills-list" style="display: flex; flex-wrap: wrap; gap: 0.375rem; padding-bottom: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle);">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Active Medicine Indications List -->
+          <div id="drug-indications-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: Rx Order Pad View (Hidden by default) -->
+      <div id="view-orderpad" style="display: none;">
+        <div style="background-color: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 1rem; padding: 1.5rem; box-shadow: var(--shadow-sm);">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.25rem;">
+                📋 Doctor's Prescription Order Pad
+              </h2>
+              <p style="font-size: 0.8125rem; color: var(--text-muted);">
+                Review, export, or copy all medication orders recorded during your ward round.
+              </p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button type="button" id="copy-all-pad-orders" style="padding: 0.5rem 1rem; border-radius: 0.5rem; background-color: var(--primary); color: #ffffff; font-size: 0.8125rem; font-weight: 700; box-shadow: var(--shadow-sm);">
+                📋 Copy All Orders
+              </button>
+              <button type="button" id="clear-all-pad-orders" style="padding: 0.5rem 0.875rem; border-radius: 0.5rem; background-color: var(--bg-app); border: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.8125rem; font-weight: 600;">
+                Clear Pad
+              </button>
+            </div>
+          </div>
+
+          <div id="orderpad-items-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Floating Toast Alert -->
+  <div id="app-toast" class="toast-alert">
+    <span style="color: #10b981; font-weight: 800; font-size: 1rem;">✓</span>
+    <span id="toast-text">Order copied to clipboard!</span>
+  </div>
+
+  <!-- Offline Data & Logic (Pure Standalone) -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
