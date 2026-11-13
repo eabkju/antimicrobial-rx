@@ -32,6 +32,9 @@
     tabConditions: document.getElementById('tab-conditions'),
     tabDrugs: document.getElementById('tab-drugs'),
     tabOrderpad: document.getElementById('tab-orderpad'),
+    mobTabConditions: document.getElementById('mob-tab-conditions'),
+    mobTabDrugs: document.getElementById('mob-tab-drugs'),
+    mobTabOrderpad: document.getElementById('mob-tab-orderpad'),
     viewConditions: document.getElementById('view-conditions'),
     viewDrugs: document.getElementById('view-drugs'),
     viewOrderpad: document.getElementById('view-orderpad'),
@@ -39,6 +42,7 @@
     themeToggle: document.getElementById('theme-toggle'),
     installPwaBtn: document.getElementById('install-pwa-btn'),
     orderpadBadge: document.getElementById('orderpad-badge-count'),
+    mobOrderpadBadge: document.getElementById('mob-orderpad-badge-count'),
 
     // Sidebar & Navigation Controls
     toggleSidebarBtn: document.getElementById('toggle-sidebar-btn'),
@@ -129,10 +133,14 @@
 
   // --- Event Listeners ---
   function setupEvents() {
-    // Tab switching
+    // Tab switching (Desktop + Mobile)
     dom.tabConditions.addEventListener('click', () => switchTab('conditions'));
     dom.tabDrugs.addEventListener('click', () => switchTab('drugs'));
     dom.tabOrderpad.addEventListener('click', () => switchTab('orderpad'));
+
+    if (dom.mobTabConditions) dom.mobTabConditions.addEventListener('click', () => switchTab('conditions'));
+    if (dom.mobTabDrugs) dom.mobTabDrugs.addEventListener('click', () => switchTab('drugs'));
+    if (dom.mobTabOrderpad) dom.mobTabOrderpad.addEventListener('click', () => switchTab('orderpad'));
 
     // Theme selector
     if (dom.colorThemeSelect) {
@@ -305,20 +313,25 @@
   function switchTab(tabName) {
     state.activeTab = tabName;
     const tabs = [
-      { name: 'conditions', btn: dom.tabConditions, view: dom.viewConditions },
-      { name: 'drugs', btn: dom.tabDrugs, view: dom.viewDrugs },
-      { name: 'orderpad', btn: dom.tabOrderpad, view: dom.viewOrderpad }
+      { name: 'conditions', btn: dom.tabConditions, mobBtn: dom.mobTabConditions, view: dom.viewConditions },
+      { name: 'drugs', btn: dom.tabDrugs, mobBtn: dom.mobTabDrugs, view: dom.viewDrugs },
+      { name: 'orderpad', btn: dom.tabOrderpad, mobBtn: dom.mobTabOrderpad, view: dom.viewOrderpad }
     ];
 
     tabs.forEach(t => {
       if (t.name === tabName) {
-        t.btn.classList.add('active');
+        if (t.btn) t.btn.classList.add('active');
+        if (t.mobBtn) t.mobBtn.classList.add('active');
         t.view.style.display = 'block';
       } else {
-        t.btn.classList.remove('active');
+        if (t.btn) t.btn.classList.remove('active');
+        if (t.mobBtn) t.mobBtn.classList.remove('active');
         t.view.style.display = 'none';
       }
     });
+
+    // Scroll to top on tab switch for smooth feel
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     render();
   }
@@ -862,6 +875,7 @@
   function updateOrderPadBadge() {
     const count = state.orderPad.length;
     if (dom.orderpadBadge) dom.orderpadBadge.textContent = count;
+    if (dom.mobOrderpadBadge) dom.mobOrderpadBadge.textContent = count;
   }
 
   // --- Recent Searches ---

@@ -1,10 +1,10 @@
 /* ==========================================================================
-   AntimicrobialRx - Multi-Theme & Visually Distinct Clinical Stylesheet
-   100% Offline & Standalone
+   AntimicrobialRx - Smooth, High-Performance Multi-Device Stylesheet
+   Responsive for Mobile, Tablet, Laptop & Desktop (100% Offline Standalone)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Theme Presets (5 Clinical Color Themes in Light & Dark Modes)
+   Theme Presets
    -------------------------------------------------------------------------- */
 
 /* Default: Clinical Teal */
@@ -20,7 +20,7 @@
 
   --bg-app: #f8fafc;
   --bg-surface: #ffffff;
-  --bg-sidebar: #f1f5f9;
+  --bg-sidebar: #ffffff;
   --bg-muted: #f1f5f9;
   --border-subtle: #e2e8f0;
   --border-strong: #cbd5e1;
@@ -58,7 +58,7 @@
 
   --bg-app: #090d16;
   --bg-surface: #111827;
-  --bg-sidebar: #0f172a;
+  --bg-sidebar: #111827;
   --bg-muted: #1e293b;
   --border-subtle: #1f293d;
   --border-strong: #334155;
@@ -83,7 +83,7 @@
   --caution-text: #fef3c7;
 }
 
-/* Theme 2: Cobalt Blue (Classic Hospital EHR) */
+/* Theme 2: Cobalt Blue */
 [data-theme="cobalt"] {
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
@@ -99,11 +99,12 @@
   --primary-glow: rgba(96, 165, 250, 0.25);
   --bg-app: #080d1a;
   --bg-surface: #0f172a;
+  --bg-sidebar: #0f172a;
   --bg-muted: #1e293b;
   --border-subtle: #1e293b;
 }
 
-/* Theme 3: Midnight Navy (Night-Shift Medical) */
+/* Theme 3: Midnight Navy */
 [data-theme="navy"] {
   --primary: #3b82f6;
   --primary-hover: #2563eb;
@@ -112,6 +113,7 @@
   --primary-glow: rgba(59, 130, 246, 0.2);
   --bg-app: #f1f5f9;
   --bg-surface: #ffffff;
+  --bg-sidebar: #ffffff;
 }
 [data-theme="navy"].dark {
   --primary: #38bdf8;
@@ -121,7 +123,7 @@
   --primary-glow: rgba(56, 189, 248, 0.25);
   --bg-app: #050b14;
   --bg-surface: #0a1120;
-  --bg-sidebar: #070c17;
+  --bg-sidebar: #0a1120;
   --bg-muted: #131f37;
   --border-subtle: #192744;
   --border-strong: #23385d;
@@ -143,6 +145,7 @@
   --primary-glow: rgba(16, 185, 129, 0.25);
   --bg-app: #06110d;
   --bg-surface: #0a1c15;
+  --bg-sidebar: #0a1c15;
   --bg-muted: #122c22;
   --border-subtle: #17382b;
 }
@@ -163,17 +166,23 @@
   --primary-glow: rgba(167, 139, 250, 0.25);
   --bg-app: #0c0817;
   --bg-surface: #150f28;
+  --bg-sidebar: #150f28;
   --bg-muted: #231b40;
   --border-subtle: #2b214f;
 }
 
 /* --------------------------------------------------------------------------
-   Base Styling
+   Base & Reset
    -------------------------------------------------------------------------- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -183,8 +192,11 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button {
@@ -192,13 +204,14 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+  touch-action: manipulation;
 }
 
 input, select {
   font-family: inherit;
 }
 
-/* Custom Scrollbars */
+/* Smooth Touch Scrolling */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -212,7 +225,7 @@ input, select {
 }
 
 /* --------------------------------------------------------------------------
-   App Header
+   App Header (Responsive & Adaptive)
    -------------------------------------------------------------------------- */
 .app-header {
   position: sticky;
@@ -221,29 +234,31 @@ input, select {
   background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-sm);
+  padding-top: env(safe-area-inset-top);
 }
 
 .header-container {
-  max-width: 1560px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0.65rem 1.25rem;
+  padding: 0.6rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .brand-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
 .toggle-sidebar-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.75rem;
+  gap: 0.35rem;
+  padding: 0.45rem 0.65rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-weight: 700;
@@ -251,6 +266,7 @@ input, select {
   border: 1px solid var(--border-subtle);
   color: var(--text-main);
   transition: all 0.15s ease;
+  flex-shrink: 0;
 }
 .toggle-sidebar-btn:hover {
   background-color: var(--primary-bg);
@@ -259,54 +275,65 @@ input, select {
 }
 
 .brand-icon {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.65rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.6rem;
   background: linear-gradient(135deg, var(--primary), #10b981);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   box-shadow: 0 2px 6px var(--primary-glow);
+  flex-shrink: 0;
+}
+
+.brand-info {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .brand-title {
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-main);
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 .brand-title span {
   color: var(--primary);
 }
 
 .brand-badge {
-  font-size: 0.625rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  padding: 0.15rem 0.4rem;
-  border-radius: 0.375rem;
+  padding: 0.12rem 0.35rem;
+  border-radius: 0.35rem;
   background-color: var(--primary-bg);
   color: var(--primary-text);
-  margin-left: 0.375rem;
+  margin-left: 0.35rem;
 }
 
 .brand-subtitle {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Navigation Tabs (Desktop & Tablet) */
 .nav-tabs {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
 .nav-tab {
-  padding: 0.45rem 0.8rem;
+  padding: 0.45rem 0.75rem;
   border-radius: 0.5rem;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -315,6 +342,7 @@ input, select {
   align-items: center;
   gap: 0.35rem;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 .nav-tab:hover {
   color: var(--text-main);
@@ -329,14 +357,14 @@ input, select {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex-shrink: 0;
 }
 
-/* Theme Picker Dropdown */
 .theme-picker-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
   background-color: var(--bg-muted);
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
@@ -372,7 +400,7 @@ input, select {
   display: none;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.7rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-weight: 700;
@@ -380,63 +408,117 @@ input, select {
   color: #ffffff;
   box-shadow: 0 2px 5px var(--primary-glow);
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 .install-pwa-btn:hover {
   transform: translateY(-1px);
 }
 
 /* --------------------------------------------------------------------------
-   App Layout (Sidebar + Main Content)
+   Mobile Bottom Navigation Bar (Thumb-Friendly on Phones)
+   -------------------------------------------------------------------------- */
+.mobile-bottom-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom));
+  z-index: 45;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-bottom-nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+
+.mobile-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.2rem;
+  border-radius: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  gap: 0.2rem;
+  transition: all 0.12s ease;
+}
+.mobile-nav-btn.active {
+  color: var(--primary);
+  background-color: var(--primary-bg);
+  font-weight: 700;
+}
+.mobile-nav-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   App Layout & Responsive Sidebar
    -------------------------------------------------------------------------- */
 .app-layout {
   display: flex;
   flex: 1;
-  max-width: 1560px;
+  max-width: 1600px;
   width: 100%;
   margin: 0 auto;
   position: relative;
 }
 
-/* Backdrop for Mobile Sidebar */
 .sidebar-backdrop {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
   z-index: 55;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 .sidebar-backdrop.active {
   display: block;
+  opacity: 1;
 }
 
-/* Sidebar Navigator */
 .sidebar {
-  width: 340px;
+  width: 330px;
+  max-width: 85vw;
   flex-shrink: 0;
-  background-color: var(--bg-surface);
+  background-color: var(--bg-sidebar);
   border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 57px;
   height: calc(100vh - 57px);
+  height: calc(100dvh - 57px);
   overflow-y: auto;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s ease, opacity 0.2s ease;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), margin-left 0.25s ease, opacity 0.2s ease;
   z-index: 60;
+  will-change: transform;
 }
 
-/* Collapsed State: hides sidebar to give full focus */
 .sidebar.collapsed {
-  margin-left: -340px;
+  margin-left: -330px;
   opacity: 0;
   pointer-events: none;
 }
 
 .sidebar-header {
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border-subtle);
   background-color: var(--bg-muted);
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .sidebar-header-top {
@@ -478,7 +560,7 @@ input, select {
 
 .pop-btn {
   flex: 1;
-  padding: 0.3rem 0.25rem;
+  padding: 0.35rem 0.25rem;
   text-align: center;
   font-size: 0.7rem;
   font-weight: 600;
@@ -493,7 +575,7 @@ input, select {
 }
 
 .sidebar-tree {
-  padding: 0.75rem;
+  padding: 0.65rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -511,7 +593,7 @@ input, select {
 
 .tree-system-header {
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.55rem 0.7rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -556,9 +638,8 @@ input, select {
   flex-shrink: 0;
 }
 
-/* Subsystems List inside Sidebar */
 .subsystems-list {
-  padding: 0.25rem 0.5rem 0.5rem 1rem;
+  padding: 0.25rem 0.4rem 0.5rem 0.85rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -566,8 +647,8 @@ input, select {
 
 .subsystem-block {
   border-left: 2px solid var(--border-strong);
-  padding-left: 0.6rem;
-  margin-left: 0.4rem;
+  padding-left: 0.5rem;
+  margin-left: 0.35rem;
 }
 
 .subsystem-title-btn {
@@ -585,18 +666,17 @@ input, select {
   color: var(--primary);
 }
 
-/* Individual Disease Topic Item in Sidebar */
 .topic-items-list {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
   margin-top: 0.2rem;
-  padding-left: 0.35rem;
+  padding-left: 0.25rem;
 }
 
 .topic-item-btn {
   width: 100%;
-  padding: 0.35rem 0.5rem;
+  padding: 0.35rem 0.45rem;
   border-radius: 0.35rem;
   font-size: 0.725rem;
   font-weight: 500;
@@ -626,12 +706,13 @@ input, select {
    -------------------------------------------------------------------------- */
 .main-content {
   flex: 1;
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.25rem 2rem 1.25rem;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  transition: margin 0.25s ease;
+  gap: 1rem;
+  min-width: 0;
 }
 
 /* Search Banner */
@@ -639,7 +720,7 @@ input, select {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 0.875rem;
-  padding: 0.875rem 1.25rem;
+  padding: 0.75rem 1rem;
   box-shadow: var(--shadow-sm);
 }
 
@@ -651,19 +732,19 @@ input, select {
 
 .search-icon {
   position: absolute;
-  left: 1rem;
+  left: 0.85rem;
   color: var(--text-subtle);
   pointer-events: none;
 }
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 3rem 0.75rem 2.75rem;
+  padding: 0.7rem 2.8rem 0.7rem 2.6rem;
   border-radius: 0.65rem;
   border: 2px solid var(--border-subtle);
   background-color: var(--bg-app);
   color: var(--text-main);
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 500;
   outline: none;
   transition: all 0.2s ease;
@@ -676,7 +757,7 @@ input, select {
 
 .search-clear-btn {
   position: absolute;
-  right: 1rem;
+  right: 0.85rem;
   color: var(--text-subtle);
   padding: 0.25rem;
   border-radius: 9999px;
@@ -687,13 +768,13 @@ input, select {
   color: var(--text-main);
 }
 
-/* Recent Search Chips */
 .recent-searches {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.65rem;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 0.25rem;
 }
 
@@ -751,7 +832,7 @@ input, select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.25rem 0.5rem;
+  padding: 0.15rem 0.25rem;
   font-size: 0.8125rem;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -761,6 +842,7 @@ input, select {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .context-breadcrumb {
@@ -769,6 +851,7 @@ input, select {
   gap: 0.35rem;
   font-weight: 600;
   color: var(--text-main);
+  flex-wrap: wrap;
 }
 .context-separator {
   color: var(--text-subtle);
@@ -781,36 +864,33 @@ input, select {
 }
 
 /* --------------------------------------------------------------------------
-   Visually Distinct Disease Cards
+   Visually Distinct Disease Cards & Smooth GPU Acceleration
    -------------------------------------------------------------------------- */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
-  gap: 1.25rem;
-}
-@media (max-width: 640px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 1.15rem;
 }
 
+/* Performance optimization: lazy rendering offscreen cards */
 .clinical-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 1rem;
+  border-radius: 0.875rem;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
 }
 .clinical-card:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
-/* Highlight flash when jumped from sidebar */
 .clinical-card.card-highlight-flash {
   animation: cardPulse 1.8s ease-in-out;
 }
@@ -832,9 +912,9 @@ input, select {
 .clinical-card.theme-eye { border-top: 5px solid #7c3aed; }
 .clinical-card.theme-pedsurg { border-top: 5px solid #ea580c; }
 
-/* Distinct Header with System Identity */
+/* Header with System Identity & Code */
 .card-header {
-  padding: 1.15rem 1.25rem 0.75rem 1.25rem;
+  padding: 1rem 1.15rem 0.65rem 1.15rem;
   border-bottom: 1px solid var(--border-subtle);
   background: linear-gradient(to right, var(--bg-muted), transparent);
 }
@@ -843,13 +923,14 @@ input, select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.4rem;
+  gap: 0.35rem;
 }
 
 .meta-badges {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
 }
 
@@ -858,7 +939,7 @@ input, select {
   font-size: 0.6875rem;
   font-weight: 800;
   padding: 0.12rem 0.45rem;
-  border-radius: 0.375rem;
+  border-radius: 0.35rem;
   background-color: var(--text-main);
   color: var(--bg-surface);
   letter-spacing: 0.04em;
@@ -867,8 +948,8 @@ input, select {
 .badge-system {
   font-size: 0.6875rem;
   font-weight: 700;
-  padding: 0.12rem 0.5rem;
-  border-radius: 0.375rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 0.35rem;
   background-color: var(--bg-app);
   border: 1px solid var(--border-subtle);
   color: var(--text-main);
@@ -878,7 +959,7 @@ input, select {
   font-size: 0.6875rem;
   font-weight: 700;
   padding: 0.12rem 0.45rem;
-  border-radius: 0.375rem;
+  border-radius: 0.35rem;
   background-color: #f3e8ff;
   color: #6b21a8;
 }
@@ -891,7 +972,7 @@ input, select {
   font-size: 0.6875rem;
   font-weight: 600;
   padding: 0.12rem 0.45rem;
-  border-radius: 0.375rem;
+  border-radius: 0.35rem;
   background-color: #e0f2fe;
   color: #0369a1;
 }
@@ -901,15 +982,16 @@ input, select {
 }
 
 .condition-title {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--text-main);
   line-height: 1.35;
   margin-bottom: 0.35rem;
+  word-break: break-word;
 }
 
 .pathogens-block {
-  margin-top: 0.45rem;
+  margin-top: 0.4rem;
 }
 .pathogens-label {
   font-size: 0.65rem;
@@ -928,7 +1010,7 @@ input, select {
 .pathogen-chip {
   font-size: 0.6875rem;
   font-weight: 500;
-  padding: 0.1rem 0.45rem;
+  padding: 0.1rem 0.4rem;
   border-radius: 0.25rem;
   background-color: var(--bg-app);
   border: 1px solid var(--border-subtle);
@@ -937,14 +1019,14 @@ input, select {
 
 /* Route & Dose Safety Callout */
 .route-caution-callout {
-  margin: 0.75rem 1.25rem 0 1.25rem;
-  padding: 0.55rem 0.85rem;
+  margin: 0.65rem 1.15rem 0 1.15rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   background-color: var(--caution-bg);
   border: 1px solid var(--caution-border);
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 .caution-icon {
   color: var(--caution-accent);
@@ -961,21 +1043,21 @@ input, select {
   font-weight: 700;
 }
 
-/* Regimen Containers */
+/* Regimens Body */
 .card-body {
-  padding: 1.15rem 1.25rem 1.25rem 1.25rem;
+  padding: 1rem 1.15rem 1.15rem 1.15rem;
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
+  gap: 0.75rem;
   flex: 1;
 }
 
 .regimen-section {
-  border-radius: 0.75rem;
-  padding: 0.85rem;
+  border-radius: 0.65rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
 }
 
 .regimen-preferred {
@@ -993,14 +1075,14 @@ input, select {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  padding-bottom: 0.35rem;
+  padding-bottom: 0.3rem;
 }
 .dark .regimen-header {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .regimen-badge {
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -1027,20 +1109,19 @@ input, select {
   background-color: var(--alt-accent);
 }
 
-/* Orders List */
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
 .order-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.55rem 0.65rem;
-  border-radius: 0.5rem;
+  gap: 0.65rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.45rem;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   transition: all 0.15s ease;
@@ -1052,21 +1133,21 @@ input, select {
 
 .order-text {
   font-family: var(--font-mono);
-  font-size: 0.785rem;
+  font-size: 0.775rem;
   font-weight: 600;
   color: var(--text-main);
   line-height: 1.45;
   word-break: break-word;
+  flex: 1;
 }
 
-/* Copy Button */
 .copy-order-btn {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 0.375rem;
+  gap: 0.3rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.35rem;
   font-size: 0.7rem;
   font-weight: 700;
   background-color: var(--bg-app);
@@ -1084,7 +1165,7 @@ input, select {
   transform: translateY(0);
 }
 
-/* Floating Toast Alert */
+/* Toast */
 .toast-alert {
   position: fixed;
   bottom: 1.5rem;
@@ -1093,7 +1174,7 @@ input, select {
   background-color: #0f172a;
   color: #ffffff;
   border: 1px solid #334155;
-  padding: 0.75rem 1.1rem;
+  padding: 0.75rem 1rem;
   border-radius: 0.75rem;
   box-shadow: var(--shadow-lg);
   display: flex;
@@ -1118,21 +1199,117 @@ input, select {
 }
 
 /* --------------------------------------------------------------------------
-   Responsive Mobile Adjustments
+   RESPONSIVE DESIGN ADAPTATIONS (Mobile, Tablet, Laptop, Desktop)
    -------------------------------------------------------------------------- */
+
+/* 1. Large Screens & Desktops (>= 1440px) */
+@media (min-width: 1440px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 2. Laptops & Medium Desktops (1025px - 1439px) */
+@media (min-width: 1025px) and (max-width: 1439px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 3. Tablets (768px - 1024px) */
 @media (max-width: 1024px) {
   .sidebar {
     position: fixed;
     top: 57px;
     left: 0;
     bottom: 0;
-    width: 320px;
-    margin-left: -320px;
+    width: 330px;
+    margin-left: -330px;
     box-shadow: var(--shadow-lg);
   }
   .sidebar.mobile-open {
     margin-left: 0;
     opacity: 1;
     pointer-events: auto;
+  }
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* 4. Small Tablets & Phablets (640px - 767px) */
+@media (max-width: 767px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-tabs {
+    display: none; /* Uses mobile bottom navigation */
+  }
+  .mobile-bottom-bar {
+    display: block;
+  }
+  .main-content {
+    padding-bottom: 5rem; /* Room for mobile bottom bar */
+  }
+  .toast-alert {
+    bottom: 4.5rem;
+    right: 1rem;
+    left: 1rem;
+  }
+}
+
+/* 5. Mobile Smartphones (< 640px) */
+@media (max-width: 639px) {
+  .header-container {
+    padding: 0.5rem 0.75rem;
+  }
+  .brand-title {
+    font-size: 0.95rem;
+  }
+  .brand-badge {
+    display: none;
+  }
+  .brand-subtitle {
+    display: none;
+  }
+  .sidebar {
+    width: 88vw;
+    margin-left: -88vw;
+  }
+  .main-content {
+    padding: 0.75rem 0.75rem 5rem 0.75rem;
+    gap: 0.85rem;
+  }
+  .search-banner {
+    padding: 0.6rem 0.75rem;
+  }
+  .search-input {
+    font-size: 0.85rem;
+    padding: 0.6rem 2.2rem 0.6rem 2.2rem;
+  }
+  .search-icon {
+    left: 0.7rem;
+    width: 1rem;
+    height: 1rem;
+  }
+  .condition-title {
+    font-size: 1.025rem;
+  }
+  .card-header {
+    padding: 0.85rem 0.9rem 0.55rem 0.9rem;
+  }
+  .card-body {
+    padding: 0.85rem 0.9rem 1rem 0.9rem;
+  }
+  .route-caution-callout {
+    margin: 0.55rem 0.9rem 0 0.9rem;
+    padding: 0.45rem 0.65rem;
+  }
+  .order-row {
+    padding: 0.45rem 0.55rem;
+  }
+  .order-text {
+    font-size: 0.75rem;
   }
 }
